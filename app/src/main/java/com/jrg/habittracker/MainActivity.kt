@@ -23,19 +23,17 @@ class MainActivity : ComponentActivity() {
             HabitTrackerTheme {
                 // A surface container using the 'background' color from the theme
                 Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
-                    SuggestiveButton()
+                    RestaurantItem()
                 }
             }
         }
     }
 }
 
+@Preview(showBackground = true)
 @Composable
-fun SuggestiveButton(){
-    Button(onClick ={}){
-        Row {
-            Image(painter = painterResource(id = R.drawable.ic_launcher_background), contentDescription = "")
-            Text(text = "Press Me")
-        }
+fun DefaultPreview(){
+    HabitTrackerTheme {
+        RestaurantItem()
     }
 }
