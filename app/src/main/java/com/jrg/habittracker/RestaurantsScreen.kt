@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Place
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -20,16 +21,18 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 
 @Composable
 fun RestaurantScreen() {
+    val viewModel: RestaurantsViewModel = viewModel()
     LazyColumn(
         contentPadding = PaddingValues(
             vertical = 8.dp,
             horizontal = 8.dp
         )
     ) {
-        items(dummyRestaurants){res->
+        items(viewModel.getRestaurants()){res->
             RestaurantItem(item = res)
         }
     }
@@ -46,9 +49,17 @@ private fun RestaurantItem(item: Restaurant) {
             modifier = Modifier.padding(8.dp)
         ) {
             RestaurantIcon(icon = Icons.Filled.Place, modifier = Modifier.weight(0.15f))
-            RestaurantDetails(modifier = Modifier.weight(0.85f), item.title, item.description)
+            RestaurantDetails(modifier = Modifier.weight(0.70f), item.title, item.description)
+            FavoriteIcon(modifier = Modifier.weight(0.15f))
         }
     }
+}
+
+@Composable
+private fun FavoriteIcon(modifier: Modifier){
+    Image(imageVector = Icons.Filled.Favorite, 
+        contentDescription = "Favorite Restaurant Icon",
+        modifier = modifier.padding(8.dp))
 }
 
 @Composable
