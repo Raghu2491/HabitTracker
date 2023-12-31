@@ -23,7 +23,7 @@ class MainActivity : ComponentActivity() {
             HabitTrackerTheme {
                 // A surface container using the 'background' color from the theme
                 Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
-                    RestaurantItem()
+                    RestaurantScreen()
                 }
             }
         }
@@ -34,6 +34,6 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun DefaultPreview(){
     HabitTrackerTheme {
-        RestaurantItem()
+        RestaurantScreen()
     }
 }

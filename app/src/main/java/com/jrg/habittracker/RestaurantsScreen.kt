@@ -4,6 +4,8 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Place
 import androidx.compose.material3.Card
@@ -19,7 +21,16 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun RestaurantItem() {
+fun RestaurantScreen(){
+    Column(Modifier.verticalScroll(rememberScrollState())) {
+        dummyRestaurants.forEach{ restaurant ->
+            RestaurantItem(item = restaurant)
+        }
+    }
+}
+
+@Composable
+private fun RestaurantItem(item: Restaurant) {
     Card(
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
         modifier = Modifier.padding(8.dp)
@@ -29,7 +40,7 @@ fun RestaurantItem() {
             modifier = Modifier.padding(8.dp)
         ) {
             RestaurantIcon(icon = Icons.Filled.Place, modifier = Modifier.weight(0.15f))
-            RestaurantDetails(modifier = Modifier.weight(0.85f))
+            RestaurantDetails(modifier = Modifier.weight(0.85f), item.title, item.description)
         }
     }
 }
@@ -44,18 +55,18 @@ private fun RestaurantIcon(icon: ImageVector, modifier: Modifier) {
 }
 
 @Composable
-private fun RestaurantDetails(modifier: Modifier) {
+private fun RestaurantDetails(modifier: Modifier, title: String, description: String) {
     Column(modifier = modifier) {
         Text(
-            text = "Best Biryani",
+            text = title,
             style = MaterialTheme.typography.headlineSmall
         )
         CompositionLocalProvider(
             LocalContentColor provides LocalContentColor.current.copy(alpha = 0.4f)
         ) {
             Text(
-                text = "This is biryani and it is good",
-                style = MaterialTheme.typography.headlineMedium
+                text = description,
+                style = MaterialTheme.typography.headlineSmall
             )
         }
     }
