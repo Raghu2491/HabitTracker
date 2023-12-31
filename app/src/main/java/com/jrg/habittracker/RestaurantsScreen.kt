@@ -4,8 +4,9 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Place
 import androidx.compose.material3.Card
@@ -21,10 +22,15 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun RestaurantScreen(){
-    Column(Modifier.verticalScroll(rememberScrollState())) {
-        dummyRestaurants.forEach{ restaurant ->
-            RestaurantItem(item = restaurant)
+fun RestaurantScreen() {
+    LazyColumn(
+        contentPadding = PaddingValues(
+            vertical = 8.dp,
+            horizontal = 8.dp
+        )
+    ) {
+        items(dummyRestaurants){res->
+            RestaurantItem(item = res)
         }
     }
 }
