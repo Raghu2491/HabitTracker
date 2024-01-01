@@ -22,7 +22,6 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -32,24 +31,31 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 @Composable
 fun RestaurantScreen() {
     val viewModel: RestaurantsViewModel = viewModel()
+    val restaurantItems by remember {
+        mutableStateOf(viewModel.getRestaurants())
+    }
     LazyColumn(
         contentPadding = PaddingValues(
             vertical = 8.dp,
             horizontal = 8.dp
         )
     ) {
-        items(viewModel.getRestaurants()) { res ->
-            RestaurantItem(item = res)
+        items(restaurantItems) { restaurant ->
+            RestaurantItem(item = restaurant){ id ->
+                val restaurants = restaurantItems.toMutableList()
+                val itemIndex = restaurants.indexOfFirst { it.id == id }
+                val item = restaurants[itemIndex]
+                restaurants[itemIndex
+                ] = item.copy(isLiked = !item.isLiked)
+            }
         }
     }
 }
 
 @Composable
-private fun RestaurantItem(item: Restaurant) {
-    val favoriteState = remember {
-        mutableStateOf(false)
-    }
-    val icon = if (favoriteState.value)
+private fun RestaurantItem(item: Restaurant,
+                           onClick: (id: Int) -> Unit) {
+    val icon = if (item.isLiked)
         Icons.Filled.Favorite
     else
         Icons.Filled.FavoriteBorder
@@ -64,25 +70,11 @@ private fun RestaurantItem(item: Restaurant) {
         ) {
             RestaurantIcon(icon = Icons.Filled.Place, modifier = Modifier.weight(0.15f))
             RestaurantDetails(modifier = Modifier.weight(0.70f), item.title, item.description)
-            FavoriteIcon(icon, modifier = Modifier.weight(0.15f)) {
-                favoriteState.value =
-                    !favoriteState.value
+            RestaurantIcon(icon, modifier = Modifier.weight(0.15f)) {
+                onClick(item.id)
             }
         }
     }
-}
-
-@Composable
-private fun FavoriteIcon(icon: ImageVector, modifier: Modifier, onClick: () -> Unit) {
-    Image(
-        imageVector = icon,
-        contentDescription = "Favorite Restaurant Icon",
-        modifier = modifier
-            .padding(8.dp)
-            .clickable {
-                onClick()
-            }
-    )
 }
 
 @Composable
@@ -90,7 +82,8 @@ private fun RestaurantIcon(icon: ImageVector, modifier: Modifier, onClick: () ->
     Image(
         imageVector = icon,
         contentDescription = "Restaurant icon",
-        modifier = modifier.padding(8.dp)
+        modifier = modifier
+            .padding(8.dp)
             .clickable {
                 onClick()
             }
