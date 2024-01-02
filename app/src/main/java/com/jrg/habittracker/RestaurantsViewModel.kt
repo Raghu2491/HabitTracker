@@ -27,10 +27,10 @@ class RestaurantsViewModel(private val savedStateHandle: SavedStateHandle) : Vie
         restInterface = retrofit.create(
             RestaurantsApiService::class.java
         )
+        restInterface.getRestaurants()
     }
 
     fun getRestaurants() {
-        restaurantsCall = restInterface.getRestaurants()
         restaurantsCall.enqueue(
             object : Callback<List<Restaurant>> {
                 override fun onResponse(

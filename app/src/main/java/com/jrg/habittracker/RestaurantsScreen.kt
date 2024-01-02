@@ -32,9 +32,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 @Composable
 fun RestaurantScreen() {
     val vm: RestaurantsViewModel = viewModel()
-    LaunchedEffect(key1 = "request_restaurants"){
-        vm.getRestaurants()
-    }
     LazyColumn(
         contentPadding = PaddingValues(
             vertical = 8.dp,
