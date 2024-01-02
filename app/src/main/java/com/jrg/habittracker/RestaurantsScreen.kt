@@ -19,6 +19,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -31,7 +32,9 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 @Composable
 fun RestaurantScreen() {
     val vm: RestaurantsViewModel = viewModel()
-    vm.getRestaurants()
+    LaunchedEffect(key1 = "request_restaurants"){
+        vm.getRestaurants()
+    }
     LazyColumn(
         contentPadding = PaddingValues(
             vertical = 8.dp,
