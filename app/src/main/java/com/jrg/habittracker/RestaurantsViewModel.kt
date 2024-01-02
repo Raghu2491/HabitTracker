@@ -3,10 +3,53 @@ package com.jrg.habittracker
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
+import com.jrg.habittracker.network.RestaurantsApiService
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 
 class RestaurantsViewModel(private val savedStateHandle: SavedStateHandle) : ViewModel() {
+    private var restInterface: RestaurantsApiService
+    val state = mutableStateOf(emptyList<Restaurant>())
+    private lateinit var restaurantsCall: Call<List<Restaurant>>
 
-    val state = mutableStateOf(dummyRestaurants.restoreSelections())
+    init {
+        val retrofit: Retrofit = Retrofit.Builder()
+            .addConverterFactory(
+                GsonConverterFactory.create()
+            )
+            .baseUrl(
+                "https://restaurants-db-default-rtdb.firebaseio.com/"
+            )
+            .build()
+        restInterface = retrofit.create(
+            RestaurantsApiService::class.java
+        )
+    }
+
+    fun getRestaurants() {
+        restaurantsCall = restInterface.getRestaurants()
+        restaurantsCall.enqueue(
+            object : Callback<List<Restaurant>> {
+                override fun onResponse(
+                    call: Call<List<Restaurant>>,
+                    response: Response<List<Restaurant>>
+                ) {
+                    response.body()?.let { restaurants ->
+                        state.value =
+                            restaurants.restoreSelections()
+                    }
+                }
+
+                override fun onFailure(
+                    call: Call<List<Restaurant>>, t: Throwable
+                ) {
+                    t.printStackTrace()
+                }
+            })
+    }
 
     fun toggleFavorite(id: Int) {
         val restaurants = state.value.toMutableList()
@@ -42,5 +85,10 @@ class RestaurantsViewModel(private val savedStateHandle: SavedStateHandle) : Vie
 
     companion object {
         const val FAVORITE = "favorite"
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        restaurantsCall.cancel()
     }
 }

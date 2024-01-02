@@ -1,6 +1,15 @@
 package com.jrg.habittracker
 
-data class Restaurant(var isLiked: Boolean, val id: Int, val title: String, val description: String)
+import com.google.gson.annotations.SerializedName
+
+data class Restaurant(
+    var isLiked: Boolean,
+    @SerializedName("r_id")
+    val id: Int,
+    @SerializedName("r_title")
+    val title: String,
+    @SerializedName("r_description")
+    val description: String)
 
 val dummyRestaurants = listOf(
     Restaurant(false, 0, "Alfredo's dishes", "At Alfredo's, we provide the best seafood dishes."),
