@@ -3,10 +3,12 @@ package com.jrg.habittracker
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.jrg.habittracker.network.RestaurantsApiService
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
@@ -27,28 +29,16 @@ class RestaurantsViewModel(private val savedStateHandle: SavedStateHandle) : Vie
         restInterface = retrofit.create(
             RestaurantsApiService::class.java
         )
-        restInterface.getRestaurants()
+        getRestaurants()
     }
 
     fun getRestaurants() {
-        restaurantsCall.enqueue(
-            object : Callback<List<Restaurant>> {
-                override fun onResponse(
-                    call: Call<List<Restaurant>>,
-                    response: Response<List<Restaurant>>
-                ) {
-                    response.body()?.let { restaurants ->
-                        state.value =
-                            restaurants.restoreSelections()
-                    }
-                }
-
-                override fun onFailure(
-                    call: Call<List<Restaurant>>, t: Throwable
-                ) {
-                    t.printStackTrace()
-                }
-            })
+        viewModelScope.launch(Dispatchers.IO) {
+            val restaurants = restInterface.getRestaurants()
+            withContext(Dispatchers.Main) {
+                state.value = restaurants.restoreSelections()
+            }
+        }
     }
 
     fun toggleFavorite(id: Int) {
