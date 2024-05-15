@@ -7,7 +7,7 @@ import com.google.gson.annotations.SerializedName
 
 @Entity(tableName = "restaurants")
 data class Restaurant(
-    var isLiked: Boolean,
+    val isLiked: Boolean,
     @PrimaryKey
     @ColumnInfo("r_id")
     @SerializedName("r_id")
