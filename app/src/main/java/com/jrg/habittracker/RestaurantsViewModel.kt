@@ -11,11 +11,14 @@ import kotlinx.coroutines.withContext
 import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.lang.Exception
 
 class RestaurantsViewModel(private val savedStateHandle: SavedStateHandle) : ViewModel() {
     private var restInterface: RestaurantsApiService
     val state = mutableStateOf(emptyList<Restaurant>())
     private lateinit var restaurantsCall: Call<List<Restaurant>>
+    private var restaurantsDao =
+        RestaurantsDB.getDaoInstance(RestaurantsApplication.getAppContext())
 
     init {
         val retrofit: Retrofit = Retrofit.Builder()
@@ -32,12 +35,23 @@ class RestaurantsViewModel(private val savedStateHandle: SavedStateHandle) : Vie
         getRestaurants()
     }
 
+    private suspend fun getRemoteRestaurants(): List<Restaurant> {
+        return withContext(Dispatchers.IO) {
+            try {
+                val restaurants = restInterface.getRestaurants()
+                restaurantsDao.addAll(restaurants)
+                return@withContext restaurants
+
+            } catch (e: Exception) {
+                return@withContext restaurantsDao.getAll()
+            }
+        }
+    }
+
     fun getRestaurants() {
         viewModelScope.launch(Dispatchers.IO) {
-            val restaurants = restInterface.getRestaurants()
-            withContext(Dispatchers.Main) {
-                state.value = restaurants.restoreSelections()
-            }
+            val restaurants = getRemoteRestaurants()
+            state.value = restaurants.restoreSelections()
         }
     }
 
