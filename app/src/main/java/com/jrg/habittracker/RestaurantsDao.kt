@@ -17,4 +17,10 @@ interface RestaurantsDao {
 
     @Update(entity = Restaurant::class)
     suspend fun update(partialRestaurant: PartialRestaurant)
+
+    @Query("SELECT * FROM restaurants WHERE is_liked=1")
+    suspend fun getAllFavorites(): List<Restaurant>
+
+    @Update(entity = Restaurant::class)
+    suspend fun updateAll(partialRestaurant: List<PartialRestaurant>)
 }
