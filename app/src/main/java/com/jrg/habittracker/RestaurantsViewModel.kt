@@ -15,7 +15,10 @@ import java.lang.Exception
 
 class RestaurantsViewModel(private val savedStateHandle: SavedStateHandle) : ViewModel() {
     private var restInterface: RestaurantsApiService
-    val state = mutableStateOf(emptyList<Restaurant>())
+    val state = mutableStateOf(RestaurantsScreenState(
+        restaurants = listOf(),
+        isLoading = true
+    ))
     private lateinit var restaurantsCall: Call<List<Restaurant>>
     private var restaurantsDao =
         RestaurantsDB.getDaoInstance(RestaurantsApplication.getAppContext())
@@ -57,18 +60,23 @@ class RestaurantsViewModel(private val savedStateHandle: SavedStateHandle) : Vie
 
     fun getRestaurants() {
         viewModelScope.launch(Dispatchers.IO) {
-            state.value  = getAllRestaurants()
+            val restaurants = getAllRestaurants()
+            state.value = state.value.copy(
+                restaurants = restaurants,
+                isLoading = false
+            )
         }
     }
 
     fun toggleFavorite(id: Int) {
-        val restaurants = state.value.toMutableList()
+        val restaurants = state.value.restaurants.toMutableList()
         val itemIndex = restaurants.indexOfFirst { it.id == id }
         restaurants[itemIndex] =
             restaurants[itemIndex].copy(isLiked = !restaurants[itemIndex].isLiked)
         saveSelection(restaurants[itemIndex])
         viewModelScope.launch {
-            state.value = toggleFavoriteRestaurant(id, restaurants[itemIndex].isLiked)
+            val updatedRestaurants = toggleFavoriteRestaurant(id, restaurants[itemIndex].isLiked)
+            state.value = state.value.copy(restaurants = updatedRestaurants, isLoading = false)
         }
     }
 
