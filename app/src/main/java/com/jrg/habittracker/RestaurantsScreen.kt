@@ -83,7 +83,7 @@ private fun RestaurantItem(
 }
 
 @Composable
-public fun RestaurantIcon(icon: ImageVector, modifier: Modifier, onClick: () -> Unit = { }) {
+fun RestaurantIcon(icon: ImageVector, modifier: Modifier, onClick: () -> Unit = { }) {
     Image(
         imageVector = icon,
         contentDescription = "Restaurant icon",
@@ -96,7 +96,7 @@ public fun RestaurantIcon(icon: ImageVector, modifier: Modifier, onClick: () -> 
 }
 
 @Composable
-public fun RestaurantDetails(
+fun RestaurantDetails(
     modifier: Modifier,
     title: String,
     description: String,
