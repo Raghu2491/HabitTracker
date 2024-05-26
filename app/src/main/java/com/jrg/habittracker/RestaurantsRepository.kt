@@ -18,7 +18,7 @@ class RestaurantsRepository {
     private val restaurantsDao =
         RestaurantsDB.getDaoInstance(RestaurantsApplication.getAppContext())
 
-    suspend fun getAllRestaurants(): List<Restaurant> {
+    suspend fun loadRestaurants(): List<Restaurant> {
         return withContext(Dispatchers.IO) {
             try {
                 val restaurants = restInterface.getRestaurants()
@@ -37,6 +37,8 @@ class RestaurantsRepository {
             }
         }
     }
+
+    suspend fun getCachedRestaurants() = restaurantsDao.getAll()
 
     suspend fun toggleFavoriteRestaurant(id: Int, isLiked: Boolean) =
         withContext(Dispatchers.IO) {
