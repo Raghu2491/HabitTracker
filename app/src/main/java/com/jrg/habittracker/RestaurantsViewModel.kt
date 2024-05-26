@@ -18,7 +18,8 @@ class RestaurantsViewModel : ViewModel() {
     val state : State<RestaurantsScreenState>
         get() = _state
 
-    val repository = RestaurantsRepository()
+    val restaurantsUseCase = GetRestaurantsUseCase()
+    val toggleRestaurantsUseCase = ToggleRestaurantsUseCase()
 
     init {
         getRestaurants()
@@ -26,7 +27,7 @@ class RestaurantsViewModel : ViewModel() {
 
     fun getRestaurants() {
         viewModelScope.launch(Dispatchers.IO) {
-            val restaurants = repository.getAllRestaurants()
+            val restaurants = restaurantsUseCase()
             _state.value = _state.value.copy(
                 restaurants = restaurants,
                 isLoading = false
@@ -37,11 +38,9 @@ class RestaurantsViewModel : ViewModel() {
     fun toggleFavorite(id: Int) {
         val restaurants = _state.value.restaurants.toMutableList()
         val itemIndex = restaurants.indexOfFirst { it.id == id }
-        restaurants[itemIndex] =
-            restaurants[itemIndex].copy(isLiked = !restaurants[itemIndex].isLiked)
         viewModelScope.launch {
             val updatedRestaurants =
-                repository.toggleFavoriteRestaurant(id, restaurants[itemIndex].isLiked)
+                toggleRestaurantsUseCase(id, restaurants[itemIndex].isLiked)
             _state.value = _state.value.copy(restaurants = updatedRestaurants, isLoading = false)
         }
     }

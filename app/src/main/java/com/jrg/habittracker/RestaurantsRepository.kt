@@ -46,6 +46,5 @@ class RestaurantsRepository {
                     isLiked
                 )
             )
-            restaurantsDao.getAll()
         }
 }
