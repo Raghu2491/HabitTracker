@@ -21,32 +21,53 @@ class RestaurantsRepository {
     suspend fun loadRestaurants(): List<Restaurant> {
         return withContext(Dispatchers.IO) {
             try {
-                val restaurants = restInterface.getRestaurants()
-                if(restaurantsDao.getAll().isEmpty())
-                    restaurantsDao.addAll(restaurants)
+                val remoteRestaurant = restInterface.getRestaurants()
+                if (restaurantsDao.getAll().isEmpty())
+                    restaurantsDao.addAll(remoteRestaurant.map {
+                        LocalRestaurant(
+                            false,
+                            it.id,
+                            it.title,
+                            it.description
+                        )
+                    })
                 val favoriteRestaurants = restaurantsDao.getAllFavorites()
                 restaurantsDao.updateAll(
                     favoriteRestaurants.map {
-                        PartialRestaurant(it.id, isLiked = true)
+                        PartialLocalRestaurant(it.id, isLiked = true)
                     }
                 )
-                return@withContext restaurantsDao.getAll()
+                return@withContext restaurantsDao.getAll().map {
+                    createRestaurant(it)
+                }
 
             } catch (e: Exception) {
-                return@withContext restaurantsDao.getAll()
+                return@withContext restaurantsDao.getAll().map {
+                    createRestaurant(it)
+                }
             }
         }
     }
 
-    suspend fun getCachedRestaurants() = restaurantsDao.getAll()
+    suspend fun getCachedRestaurants() = restaurantsDao.getAll().map {
+        createRestaurant(it)
+    }
 
     suspend fun toggleFavoriteRestaurant(id: Int, isLiked: Boolean) =
         withContext(Dispatchers.IO) {
             restaurantsDao.update(
-                PartialRestaurant(
+                PartialLocalRestaurant(
                     id,
                     isLiked
                 )
             )
         }
+
+    private fun createRestaurant(localRestaurant: LocalRestaurant) =
+        Restaurant(
+            localRestaurant.isLiked,
+            localRestaurant.id,
+            localRestaurant.title,
+            localRestaurant.description
+        )
 }
