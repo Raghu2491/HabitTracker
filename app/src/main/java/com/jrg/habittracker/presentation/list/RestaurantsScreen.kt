@@ -1,4 +1,4 @@
-package com.jrg.habittracker
+package com.jrg.habittracker.presentation.list
 
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
@@ -27,6 +27,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.jrg.habittracker.domain.Restaurant
 
 @Composable
 fun RestaurantScreen(onItemClick: (id: Int) -> Unit) {

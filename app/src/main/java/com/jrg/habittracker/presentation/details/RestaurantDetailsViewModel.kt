@@ -1,10 +1,11 @@
-package com.jrg.habittracker
+package com.jrg.habittracker.presentation.details
 
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.jrg.habittracker.network.RestaurantsApiService
+import com.jrg.habittracker.domain.Restaurant
+import com.jrg.habittracker.data.remote.RestaurantsApiService
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext

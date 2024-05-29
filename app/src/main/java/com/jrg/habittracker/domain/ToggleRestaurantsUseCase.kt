@@ -1,4 +1,6 @@
-package com.jrg.habittracker
+package com.jrg.habittracker.domain
+
+import com.jrg.habittracker.data.RestaurantsRepository
 
 class ToggleRestaurantsUseCase {
     private val restaurantRepository: RestaurantsRepository = RestaurantsRepository()

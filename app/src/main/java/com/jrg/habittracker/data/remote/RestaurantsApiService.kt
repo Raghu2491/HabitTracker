@@ -1,7 +1,5 @@
-package com.jrg.habittracker.network
+package com.jrg.habittracker.data.remote
 
-import com.jrg.habittracker.RemoteRestaurant
-import com.jrg.habittracker.Restaurant
 import retrofit2.http.GET
 import retrofit2.http.Query
 

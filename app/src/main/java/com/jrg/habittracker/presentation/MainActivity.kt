@@ -1,4 +1,4 @@
-package com.jrg.habittracker
+package com.jrg.habittracker.presentation
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -14,6 +14,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.jrg.habittracker.presentation.details.RestaurantDetailsScreen
+import com.jrg.habittracker.presentation.list.RestaurantScreen
 import com.jrg.habittracker.ui.theme.HabitTrackerTheme
 
 class MainActivity : ComponentActivity() {

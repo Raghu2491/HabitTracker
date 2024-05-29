@@ -1,4 +1,4 @@
-package com.jrg.habittracker
+package com.jrg.habittracker.data.remote
 
 import com.google.gson.annotations.SerializedName
 

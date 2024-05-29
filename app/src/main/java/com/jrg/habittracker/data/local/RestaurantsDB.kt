@@ -1,4 +1,4 @@
-package com.jrg.habittracker
+package com.jrg.habittracker.data.local
 
 import android.content.Context
 import androidx.room.Database
@@ -18,7 +18,7 @@ abstract class RestaurantsDB : RoomDatabase() {
         @Volatile
         private var INSTANCE: RestaurantsDao? = null
 
-        fun getDaoInstance(context: Context): RestaurantsDao{
+        fun getDaoInstance(context: Context): RestaurantsDao {
             synchronized(this){
                 var instance = INSTANCE
                 if(instance == null){

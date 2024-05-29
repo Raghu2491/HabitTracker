@@ -1,6 +1,11 @@
-package com.jrg.habittracker
+package com.jrg.habittracker.data
 
-import com.jrg.habittracker.network.RestaurantsApiService
+import com.jrg.habittracker.domain.Restaurant
+import com.jrg.habittracker.RestaurantsApplication
+import com.jrg.habittracker.data.local.LocalRestaurant
+import com.jrg.habittracker.data.local.PartialLocalRestaurant
+import com.jrg.habittracker.data.local.RestaurantsDB
+import com.jrg.habittracker.data.remote.RestaurantsApiService
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import retrofit2.Retrofit

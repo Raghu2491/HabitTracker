@@ -1,4 +1,4 @@
-package com.jrg.habittracker
+package com.jrg.habittracker.data.local
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity

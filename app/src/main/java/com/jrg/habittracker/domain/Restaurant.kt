@@ -1,4 +1,4 @@
-package com.jrg.habittracker
+package com.jrg.habittracker.domain
 
 data class Restaurant(
     val isLiked: Boolean = false,

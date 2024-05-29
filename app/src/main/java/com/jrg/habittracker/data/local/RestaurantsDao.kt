@@ -1,10 +1,12 @@
-package com.jrg.habittracker
+package com.jrg.habittracker.data.local
 
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
+import com.jrg.habittracker.data.local.LocalRestaurant
+import com.jrg.habittracker.data.local.PartialLocalRestaurant
 
 @Dao
 interface RestaurantsDao {

@@ -1,4 +1,4 @@
-package com.jrg.habittracker
+package com.jrg.habittracker.presentation.list
 
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
@@ -6,6 +6,9 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import androidx.compose.runtime.State
+import com.jrg.habittracker.domain.GetRestaurantsUseCase
+import com.jrg.habittracker.domain.ToggleRestaurantsUseCase
+
 class RestaurantsViewModel : ViewModel() {
 
     private val _state = mutableStateOf(
