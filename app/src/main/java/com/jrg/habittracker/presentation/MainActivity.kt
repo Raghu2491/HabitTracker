@@ -8,7 +8,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -16,6 +16,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.jrg.habittracker.presentation.details.RestaurantDetailsScreen
 import com.jrg.habittracker.presentation.list.RestaurantScreen
+import com.jrg.habittracker.presentation.list.RestaurantsViewModel
 import com.jrg.habittracker.ui.theme.HabitTrackerTheme
 
 class MainActivity : ComponentActivity() {
@@ -40,9 +41,12 @@ private fun RestaurantsApp() {
     val navController = rememberNavController()
     NavHost(navController, startDestination = "restaurants") {
         composable(route = "restaurants") {
-            RestaurantScreen { id ->
+            val vm: RestaurantsViewModel = viewModel()
+            RestaurantScreen(vm.state.value, onFavoriteClick = { id ->
+                vm.toggleFavorite(id)
+            }, onItemClick = { id ->
                 navController.navigate("restaurants/$id")
-            }
+            })
         }
         composable(
             route = "restaurants/{restaurant_id}",
@@ -52,13 +56,5 @@ private fun RestaurantsApp() {
         ) {
             RestaurantDetailsScreen()
         }
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun DefaultPreview() {
-    HabitTrackerTheme {
-        RestaurantScreen {}
     }
 }

@@ -30,9 +30,11 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.jrg.habittracker.domain.Restaurant
 
 @Composable
-fun RestaurantScreen(onItemClick: (id: Int) -> Unit) {
-    val vm: RestaurantsViewModel = viewModel()
-    val state = vm.state.value
+fun RestaurantScreen(
+    state: RestaurantsScreenState,
+    onItemClick: (id: Int) -> Unit,
+    onFavoriteClick: (id: Int) -> Unit
+) {
     Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxWidth()) {
         LazyColumn(
             contentPadding = PaddingValues(
@@ -42,13 +44,13 @@ fun RestaurantScreen(onItemClick: (id: Int) -> Unit) {
         ) {
             items(state.restaurants) { restaurant ->
                 RestaurantItem(item = restaurant, onFavoriteClick = { id ->
-                    vm.toggleFavorite(id)
+                    onFavoriteClick(id)
                 }, onItemClick = { id ->
                     onItemClick(id)
                 })
             }
         }
-        if(state.isLoading)
+        if (state.isLoading)
             CircularProgressIndicator()
     }
 }
