@@ -10,15 +10,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import com.jrg.habittracker.domain.Restaurant
 import com.jrg.habittracker.presentation.list.RestaurantDetails
 import com.jrg.habittracker.presentation.list.RestaurantIcon
 
 @Composable
-fun RestaurantDetailsScreen(){
-    val viewModel: RestaurantDetailsViewModel = viewModel()
-    val item = viewModel.state.value
-
+fun RestaurantDetailsScreen(item: Restaurant?) {
     if (item != null){
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,

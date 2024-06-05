@@ -8,8 +8,14 @@ import kotlinx.coroutines.launch
 import androidx.compose.runtime.State
 import com.jrg.habittracker.domain.GetRestaurantsUseCase
 import com.jrg.habittracker.domain.ToggleRestaurantsUseCase
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-class RestaurantsViewModel : ViewModel() {
+@HiltViewModel
+class RestaurantsViewModel @Inject constructor(
+    private val restaurantsUseCase: GetRestaurantsUseCase,
+    private val toggleRestaurantsUseCase: ToggleRestaurantsUseCase
+) : ViewModel() {
 
     private val _state = mutableStateOf(
         RestaurantsScreenState(
@@ -18,11 +24,8 @@ class RestaurantsViewModel : ViewModel() {
         )
     )
 
-    val state : State<RestaurantsScreenState>
+    val state: State<RestaurantsScreenState>
         get() = _state
-
-    val restaurantsUseCase = GetRestaurantsUseCase()
-    val toggleRestaurantsUseCase = ToggleRestaurantsUseCase()
 
     init {
         getRestaurants()

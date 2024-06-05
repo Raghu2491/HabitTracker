@@ -1,28 +1,21 @@
 package com.jrg.habittracker.data
 
 import com.jrg.habittracker.domain.Restaurant
-import com.jrg.habittracker.RestaurantsApplication
 import com.jrg.habittracker.data.local.LocalRestaurant
 import com.jrg.habittracker.data.local.PartialLocalRestaurant
-import com.jrg.habittracker.data.local.RestaurantsDB
+import com.jrg.habittracker.data.local.RestaurantsDao
 import com.jrg.habittracker.data.remote.RestaurantsApiService
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 import java.lang.Exception
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class RestaurantsRepository {
-    private val restInterface: RestaurantsApiService =
-        Retrofit.Builder()
-            .addConverterFactory(GsonConverterFactory.create())
-            .baseUrl("https://restaurants-db-default-rtdb.firebaseio.com/")
-            .build()
-            .create(RestaurantsApiService::class.java)
-
-    private val restaurantsDao =
-        RestaurantsDB.getDaoInstance(RestaurantsApplication.getAppContext())
-
+@Singleton
+class RestaurantsRepository @Inject constructor(
+    private val restInterface: RestaurantsApiService,
+    private val restaurantsDao: RestaurantsDao
+) {
     suspend fun loadRestaurants(): List<Restaurant> {
         return withContext(Dispatchers.IO) {
             try {

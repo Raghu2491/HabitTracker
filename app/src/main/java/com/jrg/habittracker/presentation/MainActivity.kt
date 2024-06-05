@@ -8,17 +8,20 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.jrg.habittracker.presentation.details.RestaurantDetailsScreen
+import com.jrg.habittracker.presentation.details.RestaurantDetailsViewModel
 import com.jrg.habittracker.presentation.list.RestaurantScreen
 import com.jrg.habittracker.presentation.list.RestaurantsViewModel
 import com.jrg.habittracker.ui.theme.HabitTrackerTheme
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,7 +44,7 @@ private fun RestaurantsApp() {
     val navController = rememberNavController()
     NavHost(navController, startDestination = "restaurants") {
         composable(route = "restaurants") {
-            val vm: RestaurantsViewModel = viewModel()
+            val vm: RestaurantsViewModel = hiltViewModel()
             RestaurantScreen(vm.state.value, onFavoriteClick = { id ->
                 vm.toggleFavorite(id)
             }, onItemClick = { id ->
@@ -54,7 +57,8 @@ private fun RestaurantsApp() {
                 type = NavType.IntType
             })
         ) {
-            RestaurantDetailsScreen()
+            val vm: RestaurantDetailsViewModel = hiltViewModel()
+            RestaurantDetailsScreen(vm.state.value)
         }
     }
 }

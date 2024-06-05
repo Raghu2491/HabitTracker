@@ -4,6 +4,12 @@ plugins {
     id("org.jetbrains.kotlin.android") version "1.9.21" apply false
 }
 
+buildscript{
+    dependencies{
+        classpath ("com.google.dagger:hilt-android-gradle-plugin:2.46.1")
+    }
+}
+
 extra.apply {
     set("compose_version", "1.5.7")
 }

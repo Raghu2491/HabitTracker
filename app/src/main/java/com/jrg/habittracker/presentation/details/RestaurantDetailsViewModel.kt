@@ -6,30 +6,24 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.jrg.habittracker.domain.Restaurant
 import com.jrg.habittracker.data.remote.RestaurantsApiService
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import javax.inject.Inject
 
-class RestaurantDetailsViewModel(private val stateHandle: SavedStateHandle) : ViewModel() {
+@HiltViewModel
+class RestaurantDetailsViewModel @Inject constructor(
+    private val stateHandle: SavedStateHandle,
+    private val restInterface: RestaurantsApiService
+) : ViewModel() {
 
-    private var restInterface: RestaurantsApiService
     val state = mutableStateOf<Restaurant?>(null)
 
     init {
-        val retrofit: Retrofit = Retrofit.Builder()
-            .addConverterFactory(
-                GsonConverterFactory.create()
-            )
-            .baseUrl(
-                "https://restaurants-db-default-rtdb.firebaseio.com/"
-            )
-            .build()
-        restInterface = retrofit.create(
-            RestaurantsApiService::class.java
-        )
-        val id = stateHandle.get<Int>("restaurant_id") ?:0
+        val id = stateHandle.get<Int>("restaurant_id") ?: 0
 
         viewModelScope.launch {
             val restaurant = getRemoteRestaurant(id)
